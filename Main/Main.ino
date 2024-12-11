@@ -38,7 +38,7 @@ void RED_funcion(int g, int y, int r ){ //GYR are pins
   digitalWrite(y , LOW);      // red
   digitalWrite(r , HIGH);     // red
 }
-void TBD_funcion(int on_g, int on_y, int on_r, int off_g, int off_y, int off_r){ //GYR are pins
+void Switch_for_10S(int on_g, int on_y, int on_r, int off_g, int off_y, int off_r){ //GYR are pins
   OFF_funcion(off_g);
   YELLOW_funcion(off_g, off_y, off_r);
   RED_funcion(off_g, off_y, off_r);
@@ -54,7 +54,7 @@ void TBD_funcion(int on_g, int on_y, int on_r, int off_g, int off_y, int off_r){
 
 void loop() {
   while(digitalRead(2) == LOW){  
-  TBD_funcion(4,5,6,10,11,12);
+  Switch_for_10S(4,5,6,10,11,12);
   }
   Green_funcion(10,11,12);
 }
