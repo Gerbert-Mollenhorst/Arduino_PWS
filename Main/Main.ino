@@ -1,7 +1,13 @@
+#include <Wire.h>
+int data = 0; 
+
+
 void setup(){
   Serial.begin(9600);
-  pinMode(13, OUTPUT);
-  pinMode(2, INPUT_PULLUP); // defaut == true/HIGH/1
+  // Start the I2C Bus as Slave on address 9
+  Wire.begin(9); 
+  // Attach a function to trigger when something is received.
+  Wire.onReceive(receiveEvent);
 
   pinMode(4, OUTPUT);  //green
   pinMode(5, OUTPUT);  //yellow
@@ -10,6 +16,12 @@ void setup(){
   pinMode(10, OUTPUT);  //green
   pinMode(11, OUTPUT);  //yellow
   pinMode(12, OUTPUT);  //red
+}
+void receiveEvent() {
+  data = Wire.read();    // read one character from the I2C
+  /*  led's 456 are data id 1x noord
+      led's 10 11 12 are data id 2x zuid
+   */
 }
 
 void ON_funcion(int x /*pin*/){
@@ -53,25 +65,24 @@ void Switch_for_10S(int on_g, int on_y, int on_r, int off_g, int off_y, int off_
 
 
 void loop() {
-  while(digitalRead(2) == LOW){  
-  Switch_for_10S(4,5,6,10,11,12);
+  Serial.print(data);
+  if (data == 11) {
+    Green_funcion(4,5,6);
   }
-  Green_funcion(10,11,12);
-}
-
-
-/*
-int i = 0;
-void loop() {
-  while(digitalRead(2) == LOW){
+  if (data == 12) {
+    YELLOW_funcion(4,5,6);
+  }
+  if (data == 13) {
+    RED_funcion(4,5,6);
+  }
+  if (data == 21) {
+    Green_funcion(10,11,12);
+  }
+  if (data == 22) {
     YELLOW_funcion(10,11,12);
-    RED_funcion(10,11,12);
-    ON_funcion(13);
-    delay(10000);
   }
-  
-  Green_funcion(10,11,12);
-  OFF_funcion(13);
+  if (data == 23) {
+    RED_funcion(10,11,12);
+
 
 }
-*/ 
