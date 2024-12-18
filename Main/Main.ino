@@ -19,7 +19,7 @@ void setup(){
 
   pinMode(1, OUTPUT);  //green
   pinMode(2, OUTPUT);  //yellow
-  pinMode(3, OUTPUT);  //red
+  pinMode(7, OUTPUT);  //red
 }
 void receiveEvent() {
   data = Wire.read();    // read one character from the I2C
@@ -27,15 +27,16 @@ void receiveEvent() {
       led's 10 11 12 are data id 2x zuid
    */
 }
-
-void ON_funcion(int x /*pin*/){
+/*
+void ON_funcion(int x /*pin/){
   Serial.println("on");
   digitalWrite(x , HIGH);
 }
-void OFF_funcion(int x /*pin*/){
+void OFF_funcion(int x /*pin/){
   Serial.println("off");
   digitalWrite(x , LOW);
 }
+*/
 void Green_funcion(int g, int y, int r ){ // GYR are pins
   Serial.println("green");
   digitalWrite(g , HIGH);
@@ -54,7 +55,7 @@ void RED_funcion(int g, int y, int r ){ //GYR are pins
   digitalWrite(y , LOW);      // red
   digitalWrite(r , HIGH);     // red
 }
-void Switch_for_10S(int on_g, int on_y, int on_r, int off_g, int off_y, int off_r){ //GYR are pins
+/*void Switch_for_10S(int on_g, int on_y, int on_r, int off_g, int off_y, int off_r){ //GYR are pins
   OFF_funcion(off_g);
   YELLOW_funcion(off_g, off_y, off_r);
   RED_funcion(off_g, off_y, off_r);
@@ -67,7 +68,7 @@ void Switch_for_10S(int on_g, int on_y, int on_r, int off_g, int off_y, int off_
   delay(1000);
 }
 
-
+*/
 void loop() {
   Serial.print(data);
   if (data == 11) {
@@ -93,12 +94,12 @@ void loop() {
 
 
   if (data == 31) {
-    Green_funcion(1,2,3);
+    Green_funcion(7,2,3);
   }
   if (data == 32) {
-    YELLOW_funcion(1,2,3);
+    YELLOW_funcion(7,2,3);
   }
   if (data == 33) {
-    RED_funcion(1,2,3);
-
+    RED_funcion(7,2,3);
+  }
 }

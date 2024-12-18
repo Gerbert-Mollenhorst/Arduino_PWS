@@ -10,7 +10,8 @@ void setup() {
 }
 void receiveEvent() {
   x = Wire.read();    // read one character from the I2C
-}
-void loop() {
   Serial.println(x);
+}
+void loop(){
+  
 }
