@@ -16,6 +16,10 @@ void setup(){
   pinMode(10, OUTPUT);  //green
   pinMode(11, OUTPUT);  //yellow
   pinMode(12, OUTPUT);  //red
+
+  pinMode(1, OUTPUT);  //green
+  pinMode(2, OUTPUT);  //yellow
+  pinMode(3, OUTPUT);  //red
 }
 void receiveEvent() {
   data = Wire.read();    // read one character from the I2C
@@ -75,6 +79,8 @@ void loop() {
   if (data == 13) {
     RED_funcion(4,5,6);
   }
+
+
   if (data == 21) {
     Green_funcion(10,11,12);
   }
@@ -83,6 +89,16 @@ void loop() {
   }
   if (data == 23) {
     RED_funcion(10,11,12);
+  }
 
+
+  if (data == 31) {
+    Green_funcion(1,2,3);
+  }
+  if (data == 32) {
+    YELLOW_funcion(1,2,3);
+  }
+  if (data == 33) {
+    RED_funcion(1,2,3);
 
 }
