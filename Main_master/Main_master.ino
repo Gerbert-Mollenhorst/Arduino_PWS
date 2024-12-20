@@ -1,88 +1,70 @@
-// Include the required Wire library for I2C<br>#include 
+// Include the required Wire library for I2C bus
 #include <Wire.h>
+// declar prevtime for time management 
+unsigned long prevtime = 0;
+// declar ident
+int ident = 1 ;
 
-//int x = 0;
-int noord = 5;
-int zuid = 6;
-
-long p_10 = 10000;
-long P_5 = 5000;
-
-unsigned long prevtime = millis();
-unsigned long prevtime_2 = millis();
-unsigned long prevtime_3 = millis();
-unsigned long prevtime_4 = millis();
-
-
+// function send data over I2C bus
+void write(int data) {
+  Wire.beginTransmission(9);  // transmit to device #9
+  Wire.write(data);           // sending data
+  Wire.endTransmission();     // Stop transmitting
+}
+// setup function *mandatory
 void setup() {
+  // start debug tool
   Serial.begin(9600);
   //Start the I2C Bus as Master
   Wire.begin(); 
-  //pinMode(noord, INPUT_PULLUP); // defaut == true/HIGH/1
-  //pinMode(zuid, INPUT_PULLUP); // defaut == true/HIGH/1
-  Wire.beginTransmission(9); // transmit to device #9
-  Wire.write(11);
-  Wire.write(21);
-  Wire.write(33); 
-  Wire.endTransmission();      // Stop transmitting
+  // start lights
+  write(11);
+  write(21);
+  write(33);
+  // debug tool
   Serial.println("end setup");
-
-
 }
 
+// loop function *mandatory
 void loop() {
+  // declar currenttime for time management 
   unsigned long currenttime = millis();
-  if (currenttime - prevtime > 5000){
-    Serial.println(1);
-    Wire.beginTransmission(9); // transmit to device #9
-    Wire.write(12);
-    Wire.write(22);
-    Wire.endTransmission();      // Stop transmitting
-    prevtime = currenttime;
+  if (ident == 1 && currenttime - prevtime > 5000) { // to yellow
+      write(12);
+      write(22);
+      ident = 2;
+      prevtime = currenttime;
+    }
+  
+  if (ident == 2 && currenttime - prevtime > 5000) {// to red
+      write(13);
+      write(23);
+      ident = 3;
+      prevtime = currenttime;
+    
   }
-  if (currenttime - prevtime > 15000){
-    Serial.println(2);
-    Wire.beginTransmission(9); // transmit to device #9
-    Wire.write(13);
-    Wire.write(23);
-    Wire.write(31);
-    Wire.endTransmission();      // Stop transmitting
-    prevtime = currenttime;
+  if (ident == 3 && currenttime - prevtime > 5000) {// to green
+      write(31);
+      ident = 4;
+      prevtime = currenttime;
+    
   }
-  if (currenttime - prevtime > 20000){
-    Serial.println(3);
-    Wire.beginTransmission(9); // transmit to device #9
-    Wire.write(32);
-    Wire.endTransmission();      // Stop transmitting
-    prevtime = currenttime;
+  if (ident == 4 && currenttime - prevtime > 5000) {// to yellow
+      write(32);
+      ident = 5;
+      prevtime = currenttime;
   }
-  if (currenttime - prevtime > 30000){
-    Serial.println(4);
-    Wire.beginTransmission(9); // transmit to device #9
-    Wire.write(11);
-    Wire.write(21);
-    Wire.write(33); 
-    Wire.endTransmission();      // Stop transmitting
+  if (ident == 5 && currenttime - prevtime > 5000) {// to red
+      write(33);
+      ident = 6;
+      prevtime = currenttime;
+  }
+
+  if (ident == 6 && currenttime - prevtime > 5000) {// to green
+    write(11);
+    write(21);
+    ident = 1;
     prevtime = currenttime;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
