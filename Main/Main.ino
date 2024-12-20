@@ -1,105 +1,97 @@
+// Include the required Wire library for I2C bus
 #include <Wire.h>
+
 int data = 0; 
+// declar lights group 1 
+int green_1 = 4;
+int yellow_1 = 5;
+int red_1 = 6;
+// declar lights group 2
+int green_2 = 10;
+int yellow_2 = 11;
+int red_2 = 12;
+// declar lights group 3
+int green_3 = 7;
+int yellow_3 = 2;
+int red_3 = 3;
 
-
+// setup function *mandatory
 void setup(){
+  // start debug tool
   Serial.begin(9600);
   // Start the I2C Bus as Slave on address 9
   Wire.begin(9); 
   // Attach a function to trigger when something is received.
   Wire.onReceive(receiveEvent);
-
-  pinMode(4, OUTPUT);  //green
-  pinMode(5, OUTPUT);  //yellow
-  pinMode(6, OUTPUT);  //red
-
-  pinMode(10, OUTPUT);  //green
-  pinMode(11, OUTPUT);  //yellow
-  pinMode(12, OUTPUT);  //red
-
-  pinMode(1, OUTPUT);  //green
-  pinMode(2, OUTPUT);  //yellow
-  pinMode(7, OUTPUT);  //red
+  // Setup lights group 1
+  pinMode(green_1, OUTPUT);
+  pinMode(yellow_1, OUTPUT);
+  pinMode(red_1, OUTPUT);
+  // Setup lights group 2
+  pinMode(green_2, OUTPUT);
+  pinMode(yellow_2, OUTPUT);
+  pinMode(red_2, OUTPUT);
+  // Setup lights group 3
+  pinMode(green_3, OUTPUT);
+  pinMode(yellow_3, OUTPUT);
+  pinMode(red_3, OUTPUT);
 }
+
+// function for receiving from master and set in variable "data"
 void receiveEvent() {
-  data = Wire.read();    // read one character from the I2C
-  /*  led's 456 are data id 1x noord
-      led's 10 11 12 are data id 2x zuid
-   */
+  data = Wire.read();
 }
-/*
-void ON_funcion(int x /*pin/){
-  Serial.println("on");
-  digitalWrite(x , HIGH);
-}
-void OFF_funcion(int x /*pin/){
-  Serial.println("off");
-  digitalWrite(x , LOW);
-}
-*/
+// function for turing lights green
 void Green_funcion(int g, int y, int r ){ // GYR are pins
-  Serial.println("green");
   digitalWrite(g , HIGH);
   digitalWrite(y , LOW);
   digitalWrite(r , LOW);
 }
+// function for turing lights yellow
 void YELLOW_funcion(int g, int y, int r ){ //GYR are pins
-  Serial.println("Yellow");
-  digitalWrite(g , LOW);      // yellow
-  digitalWrite(y , HIGH);     // yellow
-  digitalWrite(r , LOW);      // yellow
+  digitalWrite(g , LOW); 
+  digitalWrite(y , HIGH);
+  digitalWrite(r , LOW);
 }
+// function for turing lights red
 void RED_funcion(int g, int y, int r ){ //GYR are pins
-  Serial.println("red");
-  digitalWrite(g , LOW);      // red
-  digitalWrite(y , LOW);      // red
-  digitalWrite(r , HIGH);     // red
-}
-/*void Switch_for_10S(int on_g, int on_y, int on_r, int off_g, int off_y, int off_r){ //GYR are pins
-  OFF_funcion(off_g);
-  YELLOW_funcion(off_g, off_y, off_r);
-  RED_funcion(off_g, off_y, off_r);
-  delay(1000);
-  Green_funcion(on_g, on_y, on_r);
-  delay(10000);
-  OFF_funcion(on_g);
-  YELLOW_funcion(on_g, on_y, on_r);
-  RED_funcion(on_g, on_y, on_r);
-  delay(1000);
+  digitalWrite(g , LOW);      
+  digitalWrite(y , LOW);      
+  digitalWrite(r , HIGH);    
 }
 
-*/
+// loop function *mandatory
 void loop() {
-  Serial.print(data);
+  // declare functions for lights groep 1
   if (data == 11) {
-    Green_funcion(4,5,6);
+    Green_funcion(green_1, yellow_1, red_1);
   }
   if (data == 12) {
-    YELLOW_funcion(4,5,6);
+    YELLOW_funcion(green_1, yellow_1, red_1);
   }
   if (data == 13) {
-    RED_funcion(4,5,6);
+    RED_funcion(green_1, yellow_1, red_1);
   }
 
-
+  // declare functions for lights groep 2
   if (data == 21) {
-    Green_funcion(10,11,12);
+    Green_funcion(green_2, yellow_2, red_2);
   }
   if (data == 22) {
-    YELLOW_funcion(10,11,12);
+    YELLOW_funcion(green_2, yellow_2, red_2);
   }
   if (data == 23) {
-    RED_funcion(10,11,12);
+    RED_funcion(green_2, yellow_2, red_2);
   }
-
-
+  
+  // declare functions for lights groep 3
   if (data == 31) {
-    Green_funcion(7,2,3);
+    Green_funcion(green_3, yellow_3, red_3);
   }
   if (data == 32) {
-    YELLOW_funcion(7,2,3);
+    YELLOW_funcion(green_3, yellow_3, red_3);
   }
   if (data == 33) {
-    RED_funcion(7,2,3);
+    RED_funcion(green_3, yellow_3, red_3);
   }
 }
