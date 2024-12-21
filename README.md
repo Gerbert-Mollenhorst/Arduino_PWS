@@ -5,5 +5,5 @@
  - master_code and slave_code is for testing I2C bus.
  - print_slave is for printing everything form the I2C bus.
  - test is for testing LED's.
- - test_LEd_all is for testing all LED's.
+ - test_LED_all is for testing all LED's.
 
