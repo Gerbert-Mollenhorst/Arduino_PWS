@@ -40,34 +40,35 @@ void loop() {
   // declar currenttime for time management 
   unsigned long currenttime = millis();
   if (ident == 1 && currenttime - prevtime > green) { // to yellow
-      write(12);
-      write(22);
-      ident = 2;
-      prevtime = currenttime;
-    }
+    write(12);
+    write(22);
+    ident = 2;
+    prevtime = currenttime;
+  }
   
   if (ident == 2 && currenttime - prevtime > yellow) {// to red
-      write(13);
-      write(23);
-      ident = 3;
-      prevtime = currenttime;
-    
+    write(13);
+    write(23);
+    ident = 3;
+    prevtime = currenttime;
   }
+
   if (ident == 3 && currenttime - prevtime > red ) {// to green
-      write(31);
-      ident = 4;
-      prevtime = currenttime;
-    
+    write(31);
+    ident = 4;
+    prevtime = currenttime;
   }
+
   if (ident == 4 && currenttime - prevtime > green) {// to yellow
-      write(32);
-      ident = 5;
-      prevtime = currenttime;
+    write(32);
+    ident = 5;
+    prevtime = currenttime;
   }
+
   if (ident == 5 && currenttime - prevtime > yellow) {// to red
-      write(33);
-      ident = 6;
-      prevtime = currenttime;
+    write(33);
+    ident = 6;
+    prevtime = currenttime;
   }
 
   if (ident == 6 && currenttime - prevtime > red) {// to green
@@ -76,11 +77,13 @@ void loop() {
     ident = 1;
     prevtime = currenttime;
   }
+
   if (ident == 1 && digitalRead(side_road) == 0 ){
-    prevtime = currenttime + yellow;
+    prevtime = currenttime + (yellow - 1000);
   }
+
   if (ident == 4 && digitalRead(main_road) == 0 ){
-    prevtime = currenttime + yellow;
+    prevtime = currenttime + (yellow - 1000);
   }
 }
 
