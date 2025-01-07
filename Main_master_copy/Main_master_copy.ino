@@ -4,14 +4,15 @@
 unsigned long prevtime_1 = 0;
 unsigned long prevtime_2 = 0;
 // declar ident
-int ident_1 = 1 ;
-int ident_2 = 1 ;
+int ident_1 = 1;
+int ident_2 = 1;
 // declar wait time (ms)
 int red = 1000;
 int yellow = 5000;
 int green = 10000;
 // setup button pins
 bool button_1 = false;
+bool button_2 = false;
 int main_road = 2;
 int side_road = 3;
 
@@ -42,8 +43,9 @@ int tbd = 0;
 void loop() {
   // declar currenttime for time management 
   unsigned long currenttime_1 = millis();
-
+  // main to side
   while (ident_1 == 1 && currenttime_1 - prevtime_1 > tbd ){
+    Serial.println(1);
     unsigned long currenttime_2 = millis();
     if (ident_2== 1 && currenttime_2 - prevtime_2 > green) { // to yellow
       write(12);
@@ -65,7 +67,7 @@ void loop() {
       prevtime_2 = currenttime_2;
     }
     
-    if (true/*button press*/){
+    if (digitalRead(main_road)== 0){
       button_1 = true;
     }
 
@@ -75,8 +77,9 @@ void loop() {
       prevtime_1 = currenttime_1;
     }
   }
-
+  // side to main
   while (ident_1 == 2 && currenttime_1 - prevtime_1 > tbd ){
+    Serial.println(2);
     unsigned long currenttime_2 = millis();
     if (ident_2 == 1 && currenttime_2 - prevtime_2 > green) {// to yellow
       write(32);
@@ -97,36 +100,28 @@ void loop() {
       prevtime_2 = currenttime_2;
     }
 
-    if (true/*button press*/){
-      button_1 = true;
+    if (digitalRead(main_road)== 0){
+      ident_1 = 1;
+      
+      
     }
 
     if (ident_2 == 4){
-      ident_1 = 3;
+      ident_1 = 1;
       ident_2 = 1;
       prevtime_1 = currenttime_1;
     }
   }
-  if (button_1 = true){
+
+  if (button_1 == true){
+    Serial.println(3);
     button_1 = false;
-    // set correct "ident_1"
+    ident_1 = 2;
+  }
+  if (button_2 == true){
+    Serial.println(4);
+    button_2 = false;
+    ident_1 = 1;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
