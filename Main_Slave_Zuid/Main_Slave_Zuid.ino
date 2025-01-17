@@ -3,13 +3,13 @@
 
 int data = 0; 
 // declar lights group 1 
-int green_1 = 4;
-int yellow_1 = 5;
-int red_1 = 6;
+int green_1 = 10;
+int yellow_1 = 11;
+int red_1 = 12;
 // declar lights group 2
-int green_2 = 10;
-int yellow_2 = 11;
-int red_2 = 12;
+int green_2 = 4;
+int yellow_2 = 5;
+int red_2 = 6;
 // declar lights group 3
 int green_3 = 7;
 int yellow_3 = 2;

@@ -5,12 +5,16 @@ unsigned long prevtime = 0;
 // declar ident
 int ident = 1 ;
 // declar wait time (ms)
-int red = 1000;
-int yellow = 5000;
-int green = 10000;
+int red = 500;
+int yellow = 2000;
+int green = 5000;
 // setup button pins
 int main_road = 2;
 int side_road = 3;
+
+// Definieer variabelen
+long duration; // variabele voor de tijd die nodig is voor de echo van de sensor om terug te keren
+int distance; // variabele voor de afstand die we gaan meten
 
 // function send data over I2C bus
 void write(int data) {
@@ -35,6 +39,25 @@ void setup() {
   write(53);
   // debug tool
   Serial.println("end setup");
+}
+
+void traffic(){
+  // Stuur een signaal naar de trig-pin
+  digitalWrite(trigPin, LOW); // zet de trigpin uit
+  delayMicroseconds(50); // wacht 50 milliseconden
+  digitalWrite(trigPin, HIGH); // stuur een signaal naar de trigpin, een golf word uigezonden
+  delayMicroseconds(200); // wacht 200 milliseconden
+  digitalWrite(trigPin, LOW); // zet de trigger pin weer uit
+
+  duration = pulseIn(echoPin, HIGH);// Meet de tijd tussen het verzenden en ontvangen van het signaal
+
+  distance = duration * 0.034 / 2; // bereken de afstand in centimeters met de formule: afstand = (tijd * geluidssnelheid) / 2
+
+  Serial.print("Afstand: "); // toon de tekst "Afstand:" op de seriële monitor
+  Serial.print(distance); // toon de berekende afstand op de seriële monitor
+  Serial.println(" cm"); // toon de tekst "cm" op de seriële monitor en maak een nieuwe regel aan
+
+  delay(500); // wacht 500 milliseconden voordat we opnieuw beginnen met meten
 }
 
 // loop function *mandatory
