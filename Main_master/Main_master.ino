@@ -12,6 +12,12 @@ int green = 5000;
 int main_road = 2;
 int side_road = 3;
 
+// Definieer de pinnen voor de sensoren
+const int trigPin = 9; // definieer de pin waar de trigger van de sensor op aangesloten is
+const int echoPin = 10; // definieer de pin waar de echo van de sensor op aangesloten is
+
+int ref_distance = 10;
+
 // Definieer variabelen
 long duration; // variabele voor de tijd die nodig is voor de echo van de sensor om terug te keren
 int distance; // variabele voor de afstand die we gaan meten
@@ -29,8 +35,14 @@ void setup() {
   //Start the I2C Bus as Master
   Wire.begin(); 
   // setup the input ligts 
+    // Attach a function to trigger when something is received.
+  Wire.onReceive(receiveEvent);
   pinMode(main_road , INPUT_PULLUP);
   pinMode(side_road , INPUT_PULLUP);
+  // Definieer de pinnen als invoer of uitvoer
+  pinMode(trigPin, OUTPUT); // stel de trigger pin in als uitgang
+  pinMode(echoPin, INPUT); // stel de echo pin in als ingang
+
   // start lights
   write(11);
   write(23);
@@ -40,29 +52,16 @@ void setup() {
   // debug tool
   Serial.println("end setup");
 }
-
-void traffic(){
-  // Stuur een signaal naar de trig-pin
-  digitalWrite(trigPin, LOW); // zet de trigpin uit
-  delayMicroseconds(50); // wacht 50 milliseconden
-  digitalWrite(trigPin, HIGH); // stuur een signaal naar de trigpin, een golf word uigezonden
-  delayMicroseconds(200); // wacht 200 milliseconden
-  digitalWrite(trigPin, LOW); // zet de trigger pin weer uit
-
-  duration = pulseIn(echoPin, HIGH);// Meet de tijd tussen het verzenden en ontvangen van het signaal
-
-  distance = duration * 0.034 / 2; // bereken de afstand in centimeters met de formule: afstand = (tijd * geluidssnelheid) / 2
-
-  Serial.print("Afstand: "); // toon de tekst "Afstand:" op de seriële monitor
-  Serial.print(distance); // toon de berekende afstand op de seriële monitor
-  Serial.println(" cm"); // toon de tekst "cm" op de seriële monitor en maak een nieuwe regel aan
-
-  delay(500); // wacht 500 milliseconden voordat we opnieuw beginnen met meten
-}
-
+// function for receiving from master and set in variable "data"
+void receiveEvent() {
+  data = Wire.read();
 // loop function *mandatory
 void loop() {
   // declar currenttime for time management 
+  if (currenttime - prevtime > 500){
+    traffic()
+  }
+
   unsigned long currenttime = millis();
   if (ident == 1 && currenttime - prevtime > green) { // to yellow
     write(12);
@@ -134,21 +133,15 @@ void loop() {
     ident = 15;
     prevtime = currenttime;
   }
-  
   if (ident == 15 && currenttime - prevtime > red) {// to green
     write(11);
     ident = 1;
     prevtime = currenttime;
   }
 
-/*
-  if (ident == 1 && digitalRead(side_road) == 0 ){
-    prevtime = currenttime + (yellow - 1000);
+  if (data == 1){
+    ident = 15;
   }
 
-  if (ident == 4 && digitalRead(main_road) == 0 ){
-    prevtime = currenttime + (yellow - 1000);
-  } 
-*/ 
 }
 
